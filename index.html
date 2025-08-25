@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAIRHITS — Fear of Every Sportsbook</title>
+  <meta name="description" content="FAIRHITS delivers data-driven sports betting picks with transparent results, community support, and disciplined bankroll strategy." />
+  <meta property="og:title" content="FAIRHITS — Fear of Every Sportsbook" />
+  <meta property="og:description" content="Data-driven picks. Transparent history. Built to beat the line." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="https://i.postimg.cc/tCP308sk/image-removebg-preview.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ====== Design Tokens ====== */
+    :root{
+      --bg:#000;          /* page */
+      --panel:#111;       /* default surface */
+      --panel-2:#151515;  /* raised surface */
+      --text:#f5f5f5;
+      --muted:#b3b3b3;
+      --border:#212121;
+      --accent:#d4a24f;   /* gold */
+      --accent-2:#e8c97a; /* light gold */
+      --success:#58ff94;
+      --danger:#ff4c4c;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --radius:16px;
+      --radius-sm:12px;
+      --container:1120px;
+    }
+
+    /* ====== Base ====== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    a{color:var(--accent); text-decoration:none;}
+    img{max-width:100%; display:block;}
+    .container{max-width:var(--container); margin-inline:auto; padding:0 20px;}
+
+    /* ====== Utilities ====== */
+    .shadow{box-shadow:var(--shadow)}
+    .card{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:24px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:12px 22px; border-radius:999px; border:1px solid var(--accent);
+      background:var(--accent); color:#000; font-weight:700; letter-spacing:.2px;
+      transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+      box-shadow:0 6px 16px rgba(212,162,79,.2)
+    }
+    .btn:hover{filter:brightness(1.06); transform:translateY(-1px)}
+    .btn.outline{background:transparent; color:var(--accent)}
+    .btn.outline:hover{background:rgba(212,162,79,.08)}
+    .subtle{color:var(--muted)}
+    .pill{display:inline-block; padding:6px 12px; border-radius:999px; font-size:.85rem; border:1px solid var(--border); background:#0a0a0a}
+    .grid{display:grid; gap:20px}
+    .grid-3{grid-template-columns:repeat(3, minmax(0,1fr))}
+    .grid-2{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .section{padding:70px 0}
+    .section .section-title{font-size:2rem; text-align:center; color:var(--accent); margin:0 0 10px}
+    .section .section-sub{max-width:760px; text-align:center; margin:0 auto 34px; color:var(--muted)}
+    .kpi{background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius); padding:22px}
+    .kpi h3{margin:0; font-size:2rem; color:var(--accent)}
+    .kpi p{margin:6px 0 0; color:var(--muted)}
+    .divider{height:1px; background:linear-gradient(90deg, transparent, #222, transparent); margin:50px 0}
+
+    /* ====== Header / Nav ====== */
+    .nav{
+      position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px);
+      background:rgba(0,0,0,.65); border-bottom:1px solid #0f0f0f;
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; height:64px;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .brand-mark{
+      width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent));
+      position:relative; box-shadow:inset 0 0 0 2px #0008;
+    }
+    .brand h1{font-size:1.15rem; margin:0; color:var(--accent); letter-spacing:.5px}
+    .nav-links{display:flex; gap:20px; align-items:center}
+    .nav-links a{color:var(--muted)}
+    .nav-links a:hover{color:#fff}
+    .nav-toggle{display:none; background:none; border:none; color:#fff; font-size:1.2rem}
+
+    /* ====== Hero ====== */
+    .hero{
+      padding:84px 0 56px;
+      background:
+        radial-gradient(1200px 500px at 50% -10%, rgba(212,162,79,.12), transparent 60%),
+        linear-gradient(#000, #000);
+      border-bottom:1px solid var(--border);
+    }
+    .hero-wrap{display:grid; gap:26px; grid-template-columns:1.2fr .8fr; align-items:center}
+    .eyebrow{font-weight:700; color:#000; background:var(--accent); display:inline-block; padding:6px 12px; border-radius:999px; letter-spacing:.25px}
+    .hero h2{font-size:3rem; line-height:1.15; margin:10px 0 10px; color:#fff}
+    .hero p{color:#d8d8d8; margin:0 0 18px}
+    .hero-actions{display:flex; gap:14px; flex-wrap:wrap}
+    .hero-card{border:1px dashed #2a2a2a; border-radius:var(--radius); padding:18px}
+    .hero-card h4{color:var(--accent); margin:0 0 6px}
+
+    /* ====== Chart block ====== */
+    .chart-card{background:#0c0c0c; border:1px solid #1b1b1b; border-radius:var(--radius); padding:14px}
+    #lineChart{width:100%; max-height:340px}
+
+    /* ====== Features ====== */
+    .feature{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:22px}
+    .feature h4{margin:6px 0 8px; color:#fff}
+    .feature .icon{font-size:22px; color:#000; background:var(--accent); width:38px; height:38px; border-radius:9px; display:grid; place-items:center}
+
+    /* ====== Pricing / CTA ====== */
+    .pricing{display:grid; gap:20px; grid-template-columns:1fr 1fr}
+    .plan{border:1px solid var(--border); border-radius:var(--radius); padding:24px; background:var(--panel)}
+    .plan .price{font-size:2rem; color:#fff}
+    .plan .meta{color:var(--muted); margin-bottom:16px}
+    .plan ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+    .plan li{display:flex; gap:10px; align-items:flex-start}
+    .check{color:var(--accent)}
+    .plan .btn{margin-top:18px; width:100%}
+
+    /* ====== Testimonials ====== */
+    .testi{display:grid; gap:20px; grid-template-columns:repeat(3, minmax(0,1fr))}
+    .quote{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:20px}
+    .quote p{margin:0 0 10px}
+    .quote .who{color:var(--muted); font-size:.95rem}
+
+    /* ====== Accordion (FAQ & History reuse) ====== */
+    .faq{display:grid; gap:14px}
+    .faq-item{border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; background:#0c0c0c}
+    .faq-q{padding:16px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .faq-q h5{margin:0; font-size:1rem; color:#fff}
+
+    /* No-clipping accordion panels */
+    .faq-a{display:none; background:#0a0a0a; padding:0 18px}
+    .faq-a.open{display:block; padding:14px 18px 18px}
+    .faq-a p{color:#cfcfcf; margin:0}
+
+    /* ====== Footer ====== */
+    footer{border-top:1px solid var(--border); background:#000; color:var(--muted); padding:30px 0}
+    .foot{display:flex; gap:20px; justify-content:space-between; flex-wrap:wrap; align-items:center}
+    .foot .links{display:flex; gap:16px; flex-wrap:wrap}
+    .foot a{color:var(--muted)}
+    .foot a:hover{color:#fff}
+
+    /* ====== Responsive ====== */
+    @media (max-width: 980px){
+      .hero-wrap{grid-template-columns:1fr}
+    }
+    @media (max-width: 720px){
+      .grid-3{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+      .testi{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .nav-toggle{display:inline-flex}
+      .nav.open .nav-links{
+        display:flex; position:absolute; inset:64px 0 auto 0; background:#000; border-bottom:1px solid #0f0f0f; padding:12px 20px; gap:14px; flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== Sticky Navigation ====== -->
+  <nav class="nav" role="navigation">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <h1>FAIRHITS</h1>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" id="navToggle">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#stats">Stats</a>
+        <a href="#tips">Tips</a>
+        <a href="#features">Why Us</a>
+        <a href="#pricing">Join</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ====== Hero ====== -->
+  <header class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <span class="eyebrow">FEAR OF EVERY SPORTSBOOK</span>
+        <h2>Data-driven picks that <span style="color:var(--accent)">win</span> long-term</h2>
+        <p>Measured, transparent and disciplined. FAIRHITS combines analytics and expertise to target value across major leagues.</p>
+        <div class="hero-actions">
+          <a class="btn" href="https://t.me/milosavvvv" target="_blank" rel="noopener">Join Premium</a>
+          <a class="btn outline" href="https://t.me/fairhits" target="_blank" rel="noopener">Join Free Group</a>
+        </div>
+        <div class="hero-card" style="margin-top:18px">
+          <h4>Bankroll First</h4>
+          <p class="subtle">We publish suggested stake sizes and a running ledger so members can mirror responsible risk.</p>
+        </div>
+      </div>
+      <div class="chart-card shadow">
+        <canvas id="lineChart" aria-label="Performance chart" role="img"></canvas>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== KPIs ====== -->
+  <section class="section">
+    <div class="container grid grid-3">
+      <div class="kpi shadow">
+        <h3>72–87%</h3>
+        <p>Typical monthly hit rate</p>
+      </div>
+      <div class="kpi shadow">
+        <h3>430+</h3>
+        <p>Members following FAIRHITS</p>
+      </div>
+      <div class="kpi shadow">
+        <h3>100% Transparent</h3>
+        <p>Every pick is recorded—wins and losses</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider container"></div>
+
+  <!-- ====== Features ====== -->
+  <section id="features" class="section">
+    <div class="container">
+      <h3 class="section-title">Why FAIRHITS?</h3>
+      <p class="section-sub">A modern, professional approach to sports wagering—built around discipline, clarity, and long-term ROI.</p>
+      <div class="grid grid-3">
+        <div class="feature shadow">
+          <div class="icon">📈</div>
+          <h4>Model + Analyst Blend</h4>
+          <p class="subtle">Projections meet expert context for sharper lines and timely entries.</p>
+        </div>
+        <div class="feature shadow">
+          <div class="icon">🪪</div>
+          <h4>Transparent Ledger</h4>
+          <p class="subtle">Public history with stake sizing and closing line value comparisons.</p>
+        </div>
+        <div class="feature shadow">
+          <div class="icon">⏱️</div>
+          <h4>Real-Time Alerts</h4>
+          <p class="subtle">Instant Telegram drops—never miss a number.</p>
+        </div>
+        <div class="feature shadow">
+          <div class="icon">🛡️</div>
+          <h4>Bankroll Safety</h4>
+          <p class="subtle">Units, not vibes. We protect capital first, chase profits second.</p>
+        </div>
+        <div class="feature shadow">
+          <div class="icon">🌍</div>
+          <h4>Multi-League Coverage</h4>
+          <p class="subtle">Football, basketball, tennis and more—season after season.</p>
+        </div>
+        <div class="feature shadow">
+          <div class="icon">🤝</div>
+          <h4>Community</h4>
+          <p class="subtle">Active group chat, Q&A sessions, and learning resources.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Pricing / CTA ====== -->
+  <section id="pricing" class="section">
+    <div class="container pricing">
+      <div class="plan shadow">
+        <span class="pill">Starter</span>
+        <h4 style="margin:10px 0 6px; color:#fff">Free Group</h4>
+        <p class="meta">Get a feel for our approach and occasional free cards.</p>
+        <div class="price">$0 / mo</div>
+        <ul style="margin-top:12px">
+          <li><span class="check">✔</span> Occasional free tips</li>
+          <li><span class="check">✔</span> Community access</li>
+          <li><span class="check">✔</span> Monthly results summary</li>
+          <li><span class="check">✔</span> Full monthly history export</li>
+        </ul>
+        <a class="btn" href="https://t.me/fairhits" target="_blank" rel="noopener">Join Free Group</a>
+      </div>
+
+      <div class="plan shadow" style="border-color:#3a2d12; background:linear-gradient(180deg, #121212, #111)">
+        <span class="pill" style="background:rgba(212,162,79,.12); border-color:#3a2d12">Recommended</span>
+        <h4 style="margin:10px 0 6px; color:#fff">Premium</h4>
+        <p class="meta">Full card access, CLV tracking, and bankroll guidance.</p>
+        <div class="price"><span style="color:var(--accent)">$14.99</span> / mo</div>
+        <ul style="margin-top:12px">
+          <li><span class="check">✔</span> All premium picks & props</li>
+          <li><span class="check">✔</span> Real-time alerts on line moves</li>
+          <li><span class="check">✔</span> Bankroll & unit sizing framework</li>
+          <li><span class="check">✔</span> AI Based Predictions</li>
+        </ul>
+        <a class="btn" href="https://t.me/milosavvvv" target="_blank" rel="noopener">Join Premium</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Testimonials ====== -->
+  <section class="section">
+    <div class="container">
+      <h3 class="section-title">What Members Say</h3>
+      <p class="section-sub">Real feedback from our community.</p>
+      <div class="testi">
+        <div class="quote shadow">
+          <p>“I used to chase losses constantly. Having a clear plan and daily structure from FAIRHITS actually calmed my betting down.”</p>
+          <div class="who">— Alex P.</div>
+        </div>
+        <div class="quote shadow">
+          <p>“The results matter, of course, but what I really value is how they explain why a pick makes sense. It feels like I’m learning, not just copying.”</p>
+          <div class="who">— Maria G.</div>
+        </div>
+        <div class="quote shadow">
+          <p>“I was skeptical at first, but after a month I noticed my bankroll finally stabilized. No miracle promises, just steady guidance.”</p>
+          <div class="who">— Sam K.</div>
+        </div>
+        <div class="quote shadow">
+          <p>“What surprised me is how they post the losses too. Makes it easier to trust when someone isn’t trying to hide the bad days.””</p>
+          <div class="who">— Jonas K.</div>
+        </div>
+        <div class="quote shadow">
+          <p>“I don’t have time to analyze matches all day. I just check the Telegram notifications, place my bets, and go on with my life.”</p>
+          <div class="who">— Priya R.</div>
+        </div>
+        <div class="quote shadow">
+          <p>“The best thing for me was learning discipline. Even when I disagreed with a pick, sticking to the plan kept me profitable.”</p>
+          <div class="who">— Marko S.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== History (accordion months populated by JS) ====== -->
+  <section id="history" class="section">
+    <div class="container">
+      <h3 class="section-title">Free Group - Match History</h3>
+      <p class="section-sub">Review past tips and results. Wins and losses—nothing hidden.</p>
+      <!-- Replaced the old grid container with an accordion root -->
+      <div id="historyAccordion" class="faq"></div>
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section id="faq" class="section">
+    <div class="container">
+      <h3 class="section-title">Frequently Asked Questions</h3>
+      <p class="section-sub">Quick answers to common questions about membership and our process.</p>
+      <div class="faq">
+        <div class="faq-item">
+          <div class="faq-q"><h5>How are picks generated?</h5><span>▸</span></div>
+          <div class="faq-a"><p>We blend proprietary projections with analyst review. Only plays that clear a value threshold and fit bankroll rules make the card.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><h5>Do you track closing line value (CLV)?</h5><span>▸</span></div>
+          <div class="faq-a"><p>Yes. We note open vs. closing lines so members can evaluate execution quality over time.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><h5>What bankroll strategy do you use?</h5><span>▸</span></div>
+          <div class="faq-a"><p>Unit-based staking with caps per day and per event. The goal is to avoid drawdown while letting edges compound.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><h5>Can I cancel anytime?</h5><span>▸</span></div>
+          <div class="faq-a"><p>Absolutely. Premium is month-to-month—no lock-ins.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Footer ====== -->
+  <footer>
+    <div class="container foot">
+      <div class="brand" aria-label="FAIRHITS">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <strong style="color:var(--accent)">FAIRHITS</strong>
+      </div>
+      <div class="links">
+        <a href="#features">Why Us</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="mailto:hello@fairhits.example">Contact</a>
+      </div>
+      <div class="links">
+        <a href="https://t.me/fairhits" target="_blank" rel="noopener">Join Telegram</a>
+      </div>
+    </div>
+    <div class="container" style="text-align:center; margin-top:10px; font-size:.9rem">
+      © <span id="year"></span> FAIRHITS. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ====== Scripts ====== -->
+  <script src="picks.js"></script>
+  <script src="history/months.js"></script>
+  <script src="tickets.js"></script>
+  <script>
+    // Sticky nav toggle (mobile)
+    const nav = document.querySelector('.nav');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle?.addEventListener('click', () => nav.classList.toggle('open'));
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Performance chart (gold theme)
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['June', 'July', 'August', 'September', 'October', 'November'],
+        datasets: [
+          {
+            label: 'Bets Placed',
+            data: [80, 44, 43, 0, 0, 0],
+            borderColor: '#d4a24f',
+            backgroundColor: 'rgba(212,162,79,0.15)',
+            fill: true, tension: .35, yAxisID: 'y1'
+          },
+          {
+            label: 'Wins',
+            data: [64, 36, 32, 0, 0, 0],
+            borderColor: '#58ff94',
+            backgroundColor: 'rgba(88,255,148,.18)',
+            fill: true, tension: .35, yAxisID: 'y'
+          },
+          {
+            label: 'Losses',
+            data: [16, 8, 11, 0, 0, 0],
+            borderColor: '#ff4c4c',
+            backgroundColor: 'rgba(255,76,76,.18)',
+            fill: true, tension: .35, yAxisID: 'y'
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        stacked: false,
+        plugins: { legend: { labels: { color: '#b3b3b3' } } },
+        scales: {
+          y: { type:'linear', display:true, position:'left', min:0, max:100,
+               ticks:{ color:'#d4a24f' }, grid:{ color:'#222' },
+               title:{ display:true, text:'Win/Loss Rate (%)', color:'#d4a24f' } },
+          y1:{ type:'linear', display:true, position:'right', min:0, max:100,
+               ticks:{ color:'#d4a24f' }, grid:{ drawOnChartArea:false },
+               title:{ display:true, text:'Bets Placed', color:'#d4a24f' } },
+          x: { ticks:{ color:'#b3b3b3' }, grid:{ color:'#1d1d1d' } }
+        }
+      }
+    });
+
+    // Unified accordion toggling (FAQ + History)
+    document.addEventListener('click', (e) => {
+      const q = e.target.closest('.faq-q');
+      if (!q) return;
+      const a = q.parentElement.querySelector('.faq-a');
+      if (!a) return;
+      a.classList.toggle('open');
+    });
+  </script>
+
+  <!-- ====== History Accordion Renderer ====== -->
+  <script>
+    (function(){
+      const data = (window.FAIRHITS_MONTHS || []);
+      const root = document.getElementById('historyAccordion');
+      if (!root) return;
+
+      if (!Array.isArray(data) || data.length === 0) {
+        root.innerHTML = '<div class="subtle" style="padding:12px 2px">No history available yet.</div>';
+        return;
+      }
+
+      data.forEach((m) => {
+        const item = document.createElement('div');
+        item.className = 'faq-item';
+
+        const q = document.createElement('div');
+        q.className = 'faq-q';
+        q.innerHTML = `<h5>${escapeHtml(m.month || 'Unknown Month')}</h5><span>▸</span>`;
+
+        const a = document.createElement('div');
+        a.className = 'faq-a';
+
+        const summary = m.summary ? `
+          <p style="margin:0 0 10px;color:#cfcfcf">
+            Record: <strong>${summaryText(m.summary)}</strong>
+          </p>` : '';
+
+        const ticketsRows = Array.isArray(m.tickets) ? m.tickets.map(t => `
+          <tr>
+            <td>${escapeHtml(t.date || '')}</td>
+            <td>${escapeHtml(t.league || '')}</td>
+            <td>${escapeHtml(t.pick || '')}</td>
+            <td style="text-align:right">${t.units ?? ''}</td>
+            <td style="text-align:center">${escapeHtml(t.result || '')}</td>
+            <td style="text-align:right">${escapeHtml(t.clv || '')}</td>
+          </tr>
+        `).join('') : '';
+
+        a.innerHTML = `
+          ${summary}
+          <div style="overflow:auto">
+            <table style="width:100%; border-collapse:collapse; font-size:.95rem">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border)">
+                  <th style="text-align:left; padding:8px 0; color:#b3b3b3">Date</th>
+                  <th style="text-align:left; padding:8px 0; color:#b3b3b3">League</th>
+                  <th style="text-align:left; padding:8px 0; color:#b3b3b3">Pick</th>
+                  <th style="text-align:right; padding:8px 0; color:#b3b3b3">Units</th>
+                  <th style="text-align:center; padding:8px 0; color:#b3b3b3">W/L</th>
+                  <th style="text-align:right; padding:8px 0; color:#b3b3b3">CLV</th>
+                </tr>
+              </thead>
+              <tbody>${ticketsRows}</tbody>
+            </table>
+          </div>
+        `;
+
+        item.appendChild(q);
+        item.appendChild(a);
+        root.appendChild(item);
+      });
+
+      function summaryText(s){
+        const parts = [];
+        if (typeof s.wins === 'number' && typeof s.losses === 'number') parts.push(`${s.wins}–${s.losses}`);
+        if (typeof s.hitRate === 'number') parts.push(`${Number(s.hitRate).toFixed(1)}%`);
+        return parts.join(' • ');
+      }
+
+      function escapeHtml(v){
+        return String(v)
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;')
+          .replace(/'/g,'&#039;');
+      }
+    })();
+  </script>
+</body>
+</html>
