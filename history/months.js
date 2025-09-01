@@ -1,6 +1,12 @@
 
+const septemberTickets = [
+  { month: 'September 2025', date: '2025-09-01', match: '⚽️ Farul Constanta vs Petrolul Ploiesti', pick: 'Handicap 1 (0) @ 1,44', result: 'Win' },
+];
 
 const augustTickets = [
+  { month: 'August 2025', date: '2025-08-24', match: '⚽️ Rayo Vallecano vs Barcelona', pick: 'Team 2 Over (2,5) @ 2,26', result: 'Loss' },
+  { month: 'August 2025', date: '2025-08-24', match: '⚽️ Real Madrid vs Mallorca', pick: 'Handicap 2 (2.5) @ 1,60', result: 'Win' },
+  { month: 'August 2025', date: '2025-08-29', match: '⚽️ Lecce vs Milan', pick: 'W2 @ 1,79', result: 'Win' },
   { month: 'August 2025', date: '2025-08-24', match: '⚽️ Real Oviedo vs Real Madrid', pick: 'Team 2 Over (1.5) @ 1.60', result: 'Win' },
   { month: 'August 2025', date: '2025-08-23', match: '⚽️ Arouca vs Rio Ave', pick: 'Total Over (2) @ 1.58', result: 'Win' },
   { month: 'August 2025', date: '2025-08-20', match: '⚽️ El Gouna vs El Mahalla', pick: '1st Half Draw @ 1.78', result: 'Win' },
@@ -98,6 +104,20 @@ const julyTickets = [
 
 
 window.FAIRHITS_MONTHS = [
+  {
+    month: 'September 2025',
+    summary: {
+      wins: septemberTickets.filter(t => t.result.trim().toLowerCase() === 'win').length,
+      losses: septemberTickets.filter(t => t.result.trim().toLowerCase() === 'loss').length,
+      hitRate: (septemberTickets.filter(t => t.result.trim().toLowerCase() === 'win').length / augustTickets.length) * 100
+    },
+    tickets: septemberTickets.map(t => ({
+      date: t.date,
+      league: t.match,
+      pick: t.pick,
+      result: t.result
+    }))
+  },
   {
     month: 'August 2025',
     summary: {
